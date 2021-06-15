@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.paging3_mygradle.MyApplication
 import com.bignerdranch.android.paging3_mygradle.data.repository.flow.TaskFlowRepositoryImpl
@@ -15,6 +18,8 @@ import com.richarddewan.paging3_todo.databinding.FragmentFlowPagingSourceBinding
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskPagingDataAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.flow.viewmodel.FlowViewMode
 import com.bignerdranch.android.paging3_mygradle.utils.ViewModelProviderFactory
+import com.google.android.material.snackbar.Snackbar
+import com.richarddewan.paging3_todo.R
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -75,6 +80,25 @@ class FlowPagingSourceFragment: Fragment() { //video 14
             adapter = pagingDataAdapter
         }
 
+        //Load State Listener
+        pagingDataAdapter.addLoadStateListener { loadState ->
+
+            //show Progress bar when the load state is loading
+        binding.pbFlowPagineSource.isVisible =
+        loadState.source.refresh is LoadState.Loading
+
+            //LoadState for the error and show the message on the UI
+        val errorState = loadState.source.refresh as? LoadState.Error //PagingSource loadState
+            ?: loadState.source.prepend as? LoadState.Error
+            ?: loadState.source.append as? LoadState.Error
+            ?: loadState.refresh as? LoadState.Error //Remote Mediator LoadState
+            ?: loadState.append as? LoadState.Error
+            ?:loadState.prepend as? LoadState.Error
+
+            errorState?.let {
+                showErrorSnackBar(it.error.message.toString())
+            }
+        }
 
 
         //observe live data from live model
@@ -88,5 +112,17 @@ class FlowPagingSourceFragment: Fragment() { //video 14
                 pagingDataAdapter.submitData(lifecycle,it)
             }
         }
+    }
+
+    private fun showErrorSnackBar(msg: String){
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_INDEFINITE).apply {
+            setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.purple_200))
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.purple_700))
+            setActionTextColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
+            setAction(R.string.close) {
+                dismiss()
+            }
+            anchorView = binding.pbFlowPagineSource
+        }.show()
     }
 }
