@@ -17,6 +17,7 @@ import com.bignerdranch.android.paging3_mygradle.R
 import com.bignerdranch.android.paging3_mygradle.data.repository.flow.TaskFlowRemoteMediatorRepositoryImpl
 import com.bignerdranch.android.paging3_mygradle.data.repository.paging.TaskFlowRemoteMediator
 import com.bignerdranch.android.paging3_mygradle.databinding.FragmentFlowRemoteMediatorBinding
+import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskLoadStateAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskRemoteMediatorDataAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.flow.viewmodel.FlowRemoteMediatorViewModel
 import com.bignerdranch.android.paging3_mygradle.utils.ViewModelProviderFactory
@@ -81,6 +82,12 @@ class FlowRemoteMediatorFragment: Fragment() {
             layoutManager = linearLayoutManager
         }
 
+        binding.rvFlowRemoteMediator.adapter=
+                remoteMediatorAdapter.withLoadStateHeaderAndFooter(
+                    header = TaskLoadStateAdapter{ remoteMediatorAdapter.retry() },
+                    footer = TaskLoadStateAdapter{ remoteMediatorAdapter.retry() }
+                )
+
         //Load State Listener
         remoteMediatorAdapter.addLoadStateListener { loadState ->
 
@@ -104,7 +111,6 @@ class FlowRemoteMediatorFragment: Fragment() {
         //observer the live data
         observers()
     }
-
 
     @ExperimentalPagingApi
     private fun observers(){

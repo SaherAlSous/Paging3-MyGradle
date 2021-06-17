@@ -16,6 +16,7 @@ import com.bignerdranch.android.paging3_mygradle.R
 import com.bignerdranch.android.paging3_mygradle.data.repository.flow.TaskFlowRepositoryImpl
 import com.bignerdranch.android.paging3_mygradle.data.repository.paging.TaskFlowPagingSource
 import com.bignerdranch.android.paging3_mygradle.databinding.FragmentFlowPagingSourceBinding
+import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskLoadStateAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskPagingDataAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.flow.viewmodel.FlowViewMode
 import com.bignerdranch.android.paging3_mygradle.utils.ViewModelProviderFactory
@@ -79,6 +80,13 @@ class FlowPagingSourceFragment: Fragment() { //video 14
             layoutManager = LinearLayoutManager
             adapter = pagingDataAdapter
         }
+
+        //setting up theLoadState adapter (retry)
+        binding.rvFlowPagingData.adapter=
+                pagingDataAdapter.withLoadStateHeaderAndFooter(
+                    header = TaskLoadStateAdapter{ pagingDataAdapter.retry() },
+                    footer = TaskLoadStateAdapter{ pagingDataAdapter.retry() }
+                )
 
         //Load State Listener
         pagingDataAdapter.addLoadStateListener { loadState ->
