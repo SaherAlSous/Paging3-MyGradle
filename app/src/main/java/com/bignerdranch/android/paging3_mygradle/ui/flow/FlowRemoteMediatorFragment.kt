@@ -19,6 +19,7 @@ import com.bignerdranch.android.paging3_mygradle.data.repository.paging.TaskFlow
 import com.bignerdranch.android.paging3_mygradle.databinding.FragmentFlowRemoteMediatorBinding
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskLoadStateAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskRemoteMediatorDataAdapter
+import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskUiModelAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.flow.viewmodel.FlowRemoteMediatorViewModel
 import com.bignerdranch.android.paging3_mygradle.utils.ViewModelProviderFactory
 import com.google.android.material.snackbar.Snackbar
@@ -40,6 +41,7 @@ class FlowRemoteMediatorFragment: Fragment() {
     private val linearLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(requireContext())
     }
+    private lateinit var UiModelAdapter : TaskUiModelAdapter
 
     @ExperimentalPagingApi
     override fun onCreateView(
@@ -73,23 +75,26 @@ class FlowRemoteMediatorFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //setting up adapter
-        remoteMediatorAdapter = TaskRemoteMediatorDataAdapter()
+       // remoteMediatorAdapter = TaskRemoteMediatorDataAdapter()
+
+        UiModelAdapter = TaskUiModelAdapter()
+
 
 
         //setting recycler view
         binding.rvFlowRemoteMediator.apply {
-            adapter = remoteMediatorAdapter
+            adapter = UiModelAdapter
             layoutManager = linearLayoutManager
         }
 
         binding.rvFlowRemoteMediator.adapter=
-                remoteMediatorAdapter.withLoadStateHeaderAndFooter(
+            UiModelAdapter.withLoadStateHeaderAndFooter(
                     header = TaskLoadStateAdapter{ remoteMediatorAdapter.retry() },
                     footer = TaskLoadStateAdapter{ remoteMediatorAdapter.retry() }
                 )
 
         //Load State Listener
-        remoteMediatorAdapter.addLoadStateListener { loadState ->
+        UiModelAdapter.addLoadStateListener { loadState ->
 
             //show Progress bar when the load state is loading
             binding.pbFlowRemoteMediator.isVisible =
@@ -115,9 +120,13 @@ class FlowRemoteMediatorFragment: Fragment() {
     @ExperimentalPagingApi
     private fun observers(){
         lifecycleScope.launch {
-            viewModel.getTaskList()
+//            viewModel.getTaskList()
+//                .collectLatest {
+//                    remoteMediatorAdapter.submitData(lifecycle,it)
+//                }
+            viewModel.getTaskListUiModel()
                 .collectLatest {
-                    remoteMediatorAdapter.submitData(lifecycle,it)
+                    UiModelAdapter.submitData(lifecycle,it)
                 }
         }
     }
