@@ -3,19 +3,19 @@ package com.bignerdranch.android.paging3_mygradle.data.repository.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bignerdranch.android.paging3_mygradle.data.remote.NetworkService
-import com.bignerdranch.android.paging3_mygradle.data.remote.model.TaskPaging
+import com.bignerdranch.android.paging3_mygradle.data.remote.model.TaskEntity
 import com.bignerdranch.android.paging3_mygradle.data.remote.model.TaskResponseMapper
 import com.bignerdranch.android.paging3_mygradle.data.remote.response.TaskResponse
 import java.lang.Exception
 
 class TaskFlowPagingSource( //video 10
     private val networkService: NetworkService
-    ) : PagingSource<Int, TaskPaging.Task>(), TaskResponseMapper<TaskResponse, TaskPaging> {
-    override fun getRefreshKey(state: PagingState<Int, TaskPaging.Task>): Int? {
+    ) : PagingSource<Int, TaskEntity.Task>(), TaskResponseMapper<TaskResponse, TaskEntity> {
+    override fun getRefreshKey(state: PagingState<Int, TaskEntity.Task>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TaskPaging.Task> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TaskEntity.Task> {
         val currentPage = params.key ?: 1
         return try {
 
@@ -34,13 +34,13 @@ class TaskFlowPagingSource( //video 10
         }
     }
 
-    override fun mapFromResponse(response: TaskResponse): TaskPaging {
+    override fun mapFromResponse(response: TaskResponse): TaskEntity {
         return with(response){
-            TaskPaging(
+            TaskEntity(
                 totalPage = lastPage,
                 currentPage = currentPage,
                 tasks = task.map {
-                    TaskPaging.Task(
+                    TaskEntity.Task(
                         id = it.id,
                         userId = it.userId,
                         title = it.title,

@@ -12,14 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.paging3_mygradle.MyApplication
+import com.bignerdranch.android.paging3_mygradle.R
 import com.bignerdranch.android.paging3_mygradle.data.repository.flow.TaskFlowRepositoryImpl
 import com.bignerdranch.android.paging3_mygradle.data.repository.paging.TaskFlowPagingSource
-import com.richarddewan.paging3_todo.databinding.FragmentFlowPagingSourceBinding
+import com.bignerdranch.android.paging3_mygradle.databinding.FragmentFlowPagingSourceBinding
 import com.bignerdranch.android.paging3_mygradle.ui.adapter.TaskPagingDataAdapter
 import com.bignerdranch.android.paging3_mygradle.ui.flow.viewmodel.FlowViewMode
 import com.bignerdranch.android.paging3_mygradle.utils.ViewModelProviderFactory
 import com.google.android.material.snackbar.Snackbar
-import com.richarddewan.paging3_todo.R
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

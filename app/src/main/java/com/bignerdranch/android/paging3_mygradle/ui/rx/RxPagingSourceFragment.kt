@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.richarddewan.paging3_todo.databinding.FragmentFlowPagingSourceBinding
-import com.richarddewan.paging3_todo.databinding.FragmentRxPagingSourceBinding
+import com.bignerdranch.android.paging3_mygradle.databinding.FragmentRxPagingSourceBinding
 
 
 /*

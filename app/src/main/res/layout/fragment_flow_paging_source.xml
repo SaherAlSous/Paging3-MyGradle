@@ -27,5 +27,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvFlowPagingData"
         app:layout_constraintEnd_toEndOf="@+id/rvFlowPagingData"
         app:layout_constraintStart_toStartOf="@+id/rvFlowPagingData"
-        app:layout_constraintTop_toTopOf="@+id/rvFlowPagingData" />
+        app:layout_constraintTop_toTopOf="@+id/rvFlowPagingData"
+        tools:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
